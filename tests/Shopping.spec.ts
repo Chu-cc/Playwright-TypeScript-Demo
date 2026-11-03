@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
     await loginPage.loginUser("taylorswift30@yopmail.com", "taylor@123");
 });
 
-test.only('Dashboard Test', async ({ page }) => {
+test('Dashboard Test', async ({ page }) => {
     const shopping = new Shopping(page);
     //Hover over computers menu
     await shopping.computermenuHover();
