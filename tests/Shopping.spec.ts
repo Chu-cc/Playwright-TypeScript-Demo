@@ -54,7 +54,7 @@ test('Dashboard Test', async ({ page }) => {
     await expect(shopping.wishlistQty).toContainText('(1)')
  });
 
- test.only('shopping Cart', async ({ page }) => {
+ test('shopping Cart', async ({ page }) => {
     const shopping = new Shopping(page);
     const homePage = new HomePage(page);
     //Hover over computers menu
