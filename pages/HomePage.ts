@@ -18,7 +18,7 @@ export class HomePage{
           this.loginLink = page.getByRole('link', { name: 'Log in' });
           this.accountLink = page.locator('div.header-links').locator('a.account');
           this.logoutLink = page.getByRole('link', {name: 'Log out'});
-          this.cartLink = page.getByRole('link', {name: 'Shopping cart'});
+          this.cartLink = page.locator('div.header-links').locator('a.ico-cart');
           this.wishListLink = page.getByRole('link', {name: 'Wishlist'});
           this.welcomeTitle = page.locator('.topic-html-content-header');
           this.headerLink = page.locator('div.header-links');

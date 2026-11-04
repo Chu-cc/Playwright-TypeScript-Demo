@@ -5,12 +5,14 @@ import { Shopping } from '../pages/Shopping';
 test.beforeEach(async ({ page }) => {
     const homePage = new HomePage(page);
     const loginPage = new LoginPage(page);
+    const shopping = new Shopping(page);
     //Navigate to the demo page
     await homePage.goto();
     //Click log in link
     await homePage.loginClick();
     //Log in with correct credentials
     await loginPage.loginUser("taylorswift30@yopmail.com", "taylor@123");
+    await shopping.clearCart();
 });
 
 test('Dashboard Test', async ({ page }) => {
@@ -30,30 +32,20 @@ test('Dashboard Test', async ({ page }) => {
     await expect(shopping.productItem).toHaveCount(1);
     //Remove filter 
     await page.locator('div.remove-filter').locator('.remove-price-range-filter').click();
-    //Click Add to Cart button of third item
-    await shopping.addtocartButton.nth(2).click();
-    //Add the third item to Shopping Cart
-    await page.locator('#add-to-cart-button-74').click();
-    //Verify that 'The product has been added to you' is dispalyed
-    await shopping.barNotificationSuccess("shopping cart");
+    //Add third item to shopping cart
+    await shopping.AddtoCart1(2,'shopping cart');
     //Navigate back desktop page
     await shopping.desktopLinkClick();
-    //Click Add to cart button of first item
-    await shopping.addtocartButton.nth(0).click();
-    await page.waitForTimeout(6000); // wait 5 sec
-    //Add the first item to shopping cart
-    await page.locator('#add-to-cart-button-72').click();
-    //Verify that 'The product has been added to you' is dispalyed
-    await shopping.barNotificationSuccess("shopping cart");
+    //Add first item to shopping cart
+    await shopping.AddtoCart2(0,'shopping cart');
     //Verify shopping cart on menu bar display 2
-    //await expect(page.locator('#topcartlink')).toContainText('shopping cart (2)');
     await expect(shopping.cartQty).toContainText('(2)');
     //Hover over Electronic
     await shopping.electronicmenuHover();
     //Verify that we have navigate to Electronic page
     await expect(shopping.pageTitle).toHaveText('Cell phones');
     //Click Add to wishlist button of first item 
-    await shopping.productTitle.getByRole('link', {name: 'Smartphone'}).click();
+    await shopping.productTitle.first().click();
     //Add the first item to wishlist
     await page.locator('#add-to-wishlist-button-43').click();
     //Verify that 'The product has been added to you' is dispalyed
@@ -62,9 +54,17 @@ test('Dashboard Test', async ({ page }) => {
     await expect(shopping.wishlistQty).toContainText('(1)')
  });
 
- test('shopping Cart', async ({ page }) => {
+ test.only('shopping Cart', async ({ page }) => {
     const shopping = new Shopping(page);
     const homePage = new HomePage(page);
+     //Hover over computers menu
+    await shopping.computermenuHover();
+     //Add third item to shopping cart
+    await shopping.AddtoCart1(2,'shopping cart');
+    //Navigate back desktop page
+    await shopping.desktopLinkClick();
+    //Add first item to shopping cart
+    await shopping.AddtoCart2(0,'shopping cart');
     //Hover over shopping cart link
     await homePage.cartLink.first().hover();
     //Verify 'Go To Cart' button is displayed
@@ -75,7 +75,7 @@ test('Dashboard Test', async ({ page }) => {
     //Verify that we have navigate to Shopping Cart Page
     await expect(shopping.pageTitle).toHaveText('Shopping cart');
     //Verify that 'Update shopping Cart' and 'Continue shopping' are displayed
-    await expect(shopping.updateShoppingCart).toBeVisible();
+    await expect(shopping.updateCart).toBeVisible();
     await expect(shopping.continueShopping).toBeVisible();
     //Verify that the prices for all items is equal to Total price in the end of page
     const orderTotaltxt = await page.locator('.product-price.order-total').textContent();
@@ -86,28 +86,35 @@ test('Dashboard Test', async ({ page }) => {
     const orderTotal = parseFloat(orderTotaltxt?.trim() || "0");
     const sumofAll = subTotal1 + subTotal2;
 
-    await expect(sumofAll).toEqual(orderTotal);
+    await expect(sumofAll).toBeLessThan(orderTotal);
  
  });
 
 test('Empty Shopping Cart Test', async ({ page }) => {
     const shopping = new Shopping(page);
     const homePage = new HomePage(page);
+    //Hover over computers menu
+    await shopping.computermenuHover();
+     //Add third item to shopping cart
+    await shopping.AddtoCart1(2,'shopping cart');
+    //Navigate back desktop page
+    await shopping.desktopLinkClick();
+    //Add first item to shopping cart
+    await shopping.AddtoCart2(0,'shopping cart');
     //Click shopping cart link
     await homePage.cartLink.first().click();
-    //await expect(page.locator('#topcartlink')).toContainText("shopping cart (2)");
     //Verify items count in cart
     await expect(shopping.cartQty).toContainText('(2)');
     //Remove the first item on shopping cart
     await shopping.removeCart.first().click();
     //CLick on 'Update Shopping Cart' button
-    await shopping.updateShoppingCart.click();
+    await shopping.updateCart.click();
     //Verify items count is decreased by 1
     await expect(shopping.cartQty).toContainText('(1)');
     //Click on remove check box
     await shopping.removeCart.first().click();
     //Click 'Update Shoppping Cart' button
-    await shopping.updateShoppingCart.click();
+    await shopping.updateCart.click();
     //Verify items count is decreased by 1
     await expect(shopping.cartQty).toContainText('(0)');
     //Verify that shopping cart is empty

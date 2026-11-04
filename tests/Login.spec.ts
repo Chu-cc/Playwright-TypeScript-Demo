@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import{ HomePage } from '../pages/HomePage';
+import { VALID_USER } from '../Data/Data';
 
 test.beforeEach(async ({ page }) => {
     const homePage = new HomePage(page);
@@ -15,7 +16,7 @@ test('Log in Test', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   //Log in with correct credentials
-  await loginPage.loginUser("taylorswift30@yopmail.com", "taylor@123");
+  await loginPage.loginUser(VALID_USER.email, VALID_USER.password);
   //Verify 'Welcome to our store' is dispalyed
   await expect(homePage.welcomeTitle).toContainText('Welcome to our store');
   //Verify mail and log out is displayed

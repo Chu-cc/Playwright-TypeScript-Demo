@@ -34,13 +34,13 @@ export class RegisterPage{
 
   
     async registerUser(firstName: string, lastName: string, email: string, pass: string) {
-    await this.femaleGender.click();
-    await this.firstName.fill(firstName);
-    await this.LastName.fill(lastName);
-    await this.email.fill(email);
-    await this.password.fill(pass);
-    await this.confirmPassword.fill(pass);
-    await this.registerButton.click();
+     await this.femaleGender.click();
+     await this.firstName.fill(firstName);
+     await this.LastName.fill(lastName);
+     await this.email.fill(email);
+     await this.password.fill(pass);
+     await this.confirmPassword.fill(pass);
+     await this.registerButton.click();
    
   }
 

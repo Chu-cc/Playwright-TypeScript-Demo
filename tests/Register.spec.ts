@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import{ RegisterPage } from '../pages/RegisterPage';
 import{ HomePage } from '../pages/HomePage';
+import { VALID_USER } from '../Data/Data';
 
 test.beforeEach(async ({ page }) => {
   const homePage = new HomePage(page);
@@ -15,8 +16,10 @@ test.beforeEach(async ({ page }) => {
   const register = new RegisterPage(page);
   //Verify title of the page
   await expect(register.pageTitle).toContainText('Register');
+  //Create unique email with current date time
+  const uniqueEmail = `taylor.${Date.now()}@yopmail.com`;
   //Fill the register
-  await register.registerUser("Taylor", "Swift", "taylorswift30123@yopmail.com", "taylor@123")
+  await register.registerUser(VALID_USER.firstName, VALID_USER.lastName, uniqueEmail, VALID_USER.password)
   //Verify register is successful 
   await expect(register.registerResultMessage).toContainText('Your registration completed');
   //Click on contiue button
@@ -29,7 +32,7 @@ test('Register Existing User', async ({ page }) => {
   const register = new RegisterPage(page);
   const homePage = new HomePage(page);
   //Fill the existing user
-  await register.registerUser("Taylor", "Swift", "taylorswift30@yopmail.com", "taylor@123")
+   await register.registerUser(VALID_USER.firstName, VALID_USER.lastName, VALID_USER.email, VALID_USER.password)
   //Verify expected error message is displayed
   await expect(register.validmessageError).toContainText('The specified email already exists');
   // Verify user remain logs out

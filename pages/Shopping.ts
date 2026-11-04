@@ -1,4 +1,5 @@
 import { Page, Locator, expect} from "@playwright/test";
+import{ HomePage } from '../pages/HomePage';
 
 export class Shopping{
     readonly page: Page;
@@ -14,7 +15,7 @@ export class Shopping{
     readonly pageTitle: Locator;
     readonly cartQty: Locator;
     readonly wishlistQty: Locator;
-    readonly updateShoppingCart: Locator;
+    readonly updateCart: Locator;
     readonly continueShopping: Locator;
     readonly removeCart: Locator;
     readonly productTitle: Locator;
@@ -33,11 +34,52 @@ export class Shopping{
           this.pageTitle = page.locator('div.page-title h1');
           this.cartQty = page.locator('.cart-qty');
           this.wishlistQty = page.locator('.wishlist-qty');
-          this.updateShoppingCart = page.getByRole('button',{name: 'Update shopping Cart'});
+          this.updateCart = page.locator('input[name="updatecart"]');
           this.continueShopping = page.getByRole('button',{name: 'Continue shopping'});
           this.removeCart = page.locator('input[name="removefromcart"]');
-          this.productTitle = page.locator('div.product-title');
+          this.productTitle = page.locator('div.product-item').locator('h2.product-title');
           
+    }
+
+    async clearCart(){
+         const homePage = new HomePage(this.page);
+         //Click shopping cart link
+         await homePage.cartLink.first().click();
+         while (await this.removeCart.count() > 0) {
+           await this.removeCart.first().click();
+        
+           await this.updateCart.click();
+        }
+        await homePage.wishListLink.first().click();
+         while (await this.removeCart.count() > 0) {
+           await this.removeCart.first().click();
+        
+           await this.updateCart.click();
+        }
+         
+    }
+    
+     async barNotificationSuccess(context : string){
+        await expect(this.barNotification).toContainText(`The product has been added to your ${context}`);
+
+    }
+
+    async AddtoCart1(index: number, context: string){
+        //Click Add to cart button of first item
+        await this.addtocartButton.nth(index).click();
+        //Add the first item to shopping cart
+         await this.page.locator('#add-to-cart-button-74').click();
+        //Verify that 'The product has been added to you' is dispalyed
+         await this.barNotificationSuccess(context);  
+    }
+
+    async AddtoCart2(index: number, context: string){
+        //Click Add to cart button of first item
+        await this.addtocartButton.nth(index).click();
+        //Add the first item to shopping cart
+         await this.page.locator('#add-to-cart-button-72').click();
+        //Verify that 'The product has been added to you' is dispalyed
+        await this.barNotificationSuccess(context);
     }
    
     async computermenuHover(){
@@ -61,10 +103,7 @@ export class Shopping{
 
        
     }
-    async barNotificationSuccess(context : string){
-        await expect(this.barNotification).toContainText(`The product has been added to your ${context}`);
-
-    }
+   
 
     async desktopLinkClick(){
         await this.desktopLink.click();
