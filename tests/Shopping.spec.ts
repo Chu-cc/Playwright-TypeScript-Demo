@@ -57,14 +57,15 @@ test('Dashboard Test', async ({ page }) => {
  test.only('shopping Cart', async ({ page }) => {
     const shopping = new Shopping(page);
     const homePage = new HomePage(page);
-     //Hover over computers menu
+    //Hover over computers menu
     await shopping.computermenuHover();
-     //Add third item to shopping cart
+    //Add third item to shopping cart
     await shopping.AddtoCart1(2,'shopping cart');
     //Navigate back desktop page
     await shopping.desktopLinkClick();
     //Add first item to shopping cart
     await shopping.AddtoCart2(0,'shopping cart');
+        
     //Hover over shopping cart link
     await homePage.cartLink.first().hover();
     //Verify 'Go To Cart' button is displayed
@@ -85,8 +86,11 @@ test('Dashboard Test', async ({ page }) => {
     const subTotal2 = parseFloat(subTotal2txt?.trim() || "0");
     const orderTotal = parseFloat(orderTotaltxt?.trim() || "0");
     const sumofAll = subTotal1 + subTotal2;
-
-    await expect(sumofAll).toBeLessThan(orderTotal);
+    
+    await expect(subTotal1).toEqual(1815);
+    await expect(subTotal2).toEqual(815);
+    await expect(orderTotal).toEqual(2630);
+    await expect(sumofAll).toEqual(orderTotal);
  
  });
 

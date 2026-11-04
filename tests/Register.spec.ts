@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   //Verify title of the page
   await expect(register.pageTitle).toContainText('Register');
   //Create unique email with current date time
-  const uniqueEmail = `taylor.${Date.now()}@yopmail.com`;
+  const uniqueEmail = 'taylor.${Date.now()}@yopmail.com';
   //Fill the register
   await register.registerUser(VALID_USER.firstName, VALID_USER.lastName, uniqueEmail, VALID_USER.password)
   //Verify register is successful 
