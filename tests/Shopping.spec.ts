@@ -73,7 +73,7 @@ test('Dashboard Test', async ({ page }) => {
     await expect(shopping.wishlistQty).toContainText('(1)')
  });
 
- test.only('shopping Cart', async ({ page }) => {
+ test('shopping Cart', async ({ page }) => {
     const shopping = new Shopping(page);
     const homePage = new HomePage(page);
 
@@ -91,7 +91,7 @@ test('Dashboard Test', async ({ page }) => {
     //Verify that 'The product has been added to you' is dispalyed
     await expect(shopping.barNotification).toContainText('The product has been added to your shopping cart');
     await page.waitForTimeout(3000); //Wait 3 sec
-    
+
     //Hover over shopping cart link
     await homePage.cartLink.first().hover();
     //Verify 'Go To Cart' button is displayed
