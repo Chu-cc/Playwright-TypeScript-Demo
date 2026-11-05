@@ -91,9 +91,9 @@ test('Dashboard Test', async ({ page }) => {
     //Verify that 'The product has been added to you' is dispalyed
     await expect(shopping.barNotification).toContainText('The product has been added to your shopping cart');
     await page.waitForTimeout(3000); //Wait 3 sec
+    
     //Hover over shopping cart link
     await homePage.cartLink.first().hover();
-    await page.waitForTimeout(3000); //Wait 3 sec
     //Verify 'Go To Cart' button is displayed
     await expect(page.getByRole('button', {name: 'Go To Cart'})).toBeVisible();
     //CLick Go To Cart button
