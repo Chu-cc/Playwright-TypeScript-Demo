@@ -93,6 +93,7 @@ test('Dashboard Test', async ({ page }) => {
     
     //Hover over shopping cart link
     await homePage.cartLink.first().hover();
+    await page.waitForTimeout(3000); //Wait 3 sec
     //Verify 'Go To Cart' button is displayed
     await expect(page.getByRole('button', {name: 'Go To Cart'})).toBeVisible();
     //CLick Go To Cart button
