@@ -66,8 +66,8 @@ npx playwright show-report
   * If you already have an existing account or want to use specific user credentials, you can easily update them by editing the `VALID_USER` object inside the **`Data/Data.ts`** file.
 
  ### Price Filter Mapping
-To fulfill the assignment's price filter scenario, the Desktops price filter is tested with the range `$1000.00 - $1200.00`:
-- **Filter Applied:** Selecting the `$1000.00 - $1200.00` range updates the displayed item count from **4 to 1**.
+To fulfill the assignment's price filter scenario, the Desktops price filter is tested with the range `1000.00 - 1200.00`:
+- **Filter Applied:** Selecting the `1000.00 - 1200.00` range updates the displayed item count from **4 to 1**.
 - **Filter Cleared:** Unchecking/clearing the price range restores the displayed item count back from **1 to 4**.
 
 
