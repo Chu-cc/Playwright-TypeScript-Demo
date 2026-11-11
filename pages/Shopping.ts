@@ -11,6 +11,7 @@ export class Shopping{
     readonly addtocartButton: Locator;
     readonly barNotification: Locator;
     readonly desktopLink: Locator;
+    readonly cellPhoneLink: Locator;
     readonly cellPhoneSubMenu: Locator;
     readonly pageTitle: Locator;
     readonly cartQty: Locator;
@@ -19,6 +20,11 @@ export class Shopping{
     readonly continueShopping: Locator;
     readonly removeCart: Locator;
     readonly productTitle: Locator;
+    readonly estimateShoppingTitle: Locator;
+    readonly countryDropdown: Locator;
+    readonly stateProvinceDropdown: Locator;
+    readonly zipPostalCodeInput: Locator;
+    readonly estimateShippingButton: Locator;
 
     constructor(page: Page){
           this.page = page;
@@ -31,6 +37,7 @@ export class Shopping{
           this.addtocartButton = page.getByRole('button',{name : 'Add to cart'});
           this.barNotification = page.locator('#bar-notification');
           this.desktopLink = page.locator('.breadcrumb').getByRole('link', {name : 'Desktops'});
+          this.cellPhoneLink = page.locator('.breadcrumb').getByRole('link', {name : 'Cell phones'});
           this.pageTitle = page.locator('div.page-title h1');
           this.cartQty = page.locator('.cart-qty');
           this.wishlistQty = page.locator('.wishlist-qty');
@@ -38,6 +45,11 @@ export class Shopping{
           this.continueShopping = page.getByRole('button',{name: 'Continue shopping'});
           this.removeCart = page.locator('input[name="removefromcart"]');
           this.productTitle = page.locator('div.product-item').locator('h2.product-title');
+          this.estimateShoppingTitle = page.locator('div.estimate-shipping').locator('div.title');
+          this.countryDropdown = page.locator('#CountryId');
+          this.stateProvinceDropdown = page.locator('#StateProvinceId');
+          this.zipPostalCodeInput = page.locator('#ZipPostalCode');
+          this.estimateShippingButton = page.getByRole('button', {name: 'estimateshipping'})
           
     }
 
@@ -81,6 +93,13 @@ export class Shopping{
          await this.page.locator('#add-to-cart-button-72').click();
     }
 
+     async AddtoCart3(index: number){
+        //Click Add to cart button of first item
+        await this.addtocartButton.nth(index).click();
+        //Add the first item to shopping cart
+         await this.page.locator('#add-to-cart-button-16').click(); 
+    }
+
    //Hover over computer menu and choose desktop 
     async navigatetoDesktopMenu(){
         await this.computerMenu.hover();
@@ -107,6 +126,10 @@ export class Shopping{
 
     async desktopLinkClick(){
         await this.desktopLink.click();
+    }
+
+     async cellPhoneLinkClick(){
+        await this.cellPhoneLink.click();
     }
 
      

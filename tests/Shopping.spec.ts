@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import{ LoginPage } from '../pages/LoginPage';
 import{ HomePage } from '../pages/HomePage';
 import { Shopping } from '../pages/Shopping';
+import { Message, VALID_USER } from '../Data/Data';
 
 test.beforeEach(async ({ page }) => {
     const homePage = new HomePage(page);
@@ -46,14 +47,26 @@ test('Dashboard Test', async ({ page }) => {
 
     //Add third item to shopping cart
     await shopping.AddtoCart1(2);
-    //Verify that 'The product has been added to you' is dispalyed
-    await expect(shopping.barNotification).toContainText('The product has been added to your shopping cart');
+    //Verify that 'The product has been added to your shopping cart' is dispalyed
+    await expect(shopping.barNotification).toContainText(Message.shoppingCartbarSuccessNotification);
     //Navigate back to desktop page
     await shopping.desktopLinkClick();
     //Add first item to shopping cart
     await shopping.AddtoCart2(0);
+    //Verify that 'The product has been added to your shopping cart' is dispalyed
+    await expect(shopping.barNotification).toContainText(Message.shoppingCartbarSuccessNotification);
+    //Navigate back to desktop page
+    await shopping.desktopLinkClick();
+    //Add second item to shopping cart
+    await shopping.AddtoCart3(1);
+    //Verify that 'Please select HDD' is dispalyed if HDD is not selected
+    await expect(shopping.barNotification).toContainText(Message.barErrorNotification);
+    //Choose HDD 
+    await page.locator('#product_attribute_16_3_6_18').check();
+    //Add the first item to shopping cart
+    await page.locator('#add-to-cart-button-16').click(); 
     //Verify shopping cart on menu bar display 2
-    await expect(shopping.cartQty).toContainText('(2)');
+    await expect(shopping.cartQty).toContainText('(3)');
 
     //Clear the wishlist before adding item
     await shopping.clearWishlist();
@@ -67,10 +80,18 @@ test('Dashboard Test', async ({ page }) => {
     await shopping.productTitle.first().click();
     //Add the item to wishlist
     await page.locator('#add-to-wishlist-button-43').click();
-    //Verify that 'The product has been added to you' is dispalyed
-    await expect(shopping.barNotification).toContainText('The product has been added to your wishlist');
+    //Verify that 'The product has been added to your wishlist' is dispalyed
+    await expect(shopping.barNotification).toContainText(Message.wishListbarSucessNotification);
+    //Navigate back to cell phone
+    await shopping.cellPhoneLinkClick();
+    //Click on phone cover product
+    await shopping.productTitle.nth(2).click();
+    //Add the item to wishlist
+    await page.locator('#add-to-wishlist-button-80').click();
+     //Verify that 'The product has been added to you wishlist' is dispalyed
+    await expect(shopping.barNotification).toContainText(Message.wishListbarSucessNotification);
     //Verify shopping cart on menu bar display 1
-    await expect(shopping.wishlistQty).toContainText('(1)')
+    await expect(shopping.wishlistQty).toContainText('(2)')
  });
 
  test('shopping Cart', async ({ page }) => {
@@ -89,7 +110,7 @@ test('Dashboard Test', async ({ page }) => {
     //Add first item to shopping cart
     await shopping.AddtoCart2(0);
     //Verify that 'The product has been added to you' is dispalyed
-    await expect(shopping.barNotification).toContainText('The product has been added to your shopping cart');
+    await expect(shopping.barNotification).toContainText(Message.shoppingCartbarSuccessNotification);
     await page.waitForTimeout(3000); //Wait 3 sec
 
     //Hover over shopping cart link
@@ -135,26 +156,36 @@ test('Empty Shopping Cart Test', async ({ page }) => {
     await shopping.desktopLinkClick();
     //Add first item to shopping cart
     await shopping.AddtoCart2(0);
-
+     
+    let cartRowCount = await shopping.removeCart.count();
     //Click shopping cart link
     await homePage.cartLink.first().click();
-    //Verify items count in cart
-    await expect(shopping.cartQty).toContainText('(2)');
+    //Verify cart row count in cart
+    await expect(shopping.removeCart).toHaveCount(2);
 
     //Remove the first item on shopping cart
     await shopping.removeCart.first().click();
     //CLick on 'Update Shopping Cart' button
     await shopping.updateCart.click();
-    //Verify items count is decreased by 1
-    await expect(shopping.cartQty).toContainText('(1)');
+    //Verify cart row count is decreased by 1 in cart
+    await expect(shopping.removeCart).toHaveCount(cartRowCount - 1);
 
     //Click on remove check box
     await shopping.removeCart.first().click();
     //Click 'Update Shoppping Cart' button
     await shopping.updateCart.click();
-    //Verify items count is decreased by 1
-    await expect(shopping.cartQty).toContainText('(0)');
+    //Verify cart row count is zero in cart
+    await expect(shopping.removeCart).toHaveCount(0);
     //Verify that shopping cart is empty
-    await expect(page.locator('.order-summary-content')).toContainText("Your Shopping Cart is empty!");
+    await expect(page.locator('.order-summary-content')).toContainText(Message.cartEmptyMessage);
+
+    //Verify estimation shopping control is displayed
+    await expect(shopping.estimateShoppingTitle).toHaveText("Estimate shipping");
+    await expect(shopping.countryDropdown).toBeVisible();
+    await expect(shopping.stateProvinceDropdown).toBeVisible();  
+    await expect(shopping.zipPostalCodeInput).toBeVisible();
+    await expect(shopping.estimateShippingButton).toBeVisible();
+
+
  });
 
