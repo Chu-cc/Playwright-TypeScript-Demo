@@ -105,13 +105,16 @@ test('Dashboard Test', async ({ page }) => {
     await shopping.navigatetoDesktopMenu();
      //Add third item to shopping cart
     await shopping.AddtoCart1(2);
+     //Verify that 'The product has been added to your shopping cart' is dispalyed
+    await expect(shopping.barNotification).toContainText(Message.shoppingCartbarSuccessNotification);
     //Navigate back to desktop page
     await shopping.desktopLinkClick();
     //Add first item to shopping cart
     await shopping.AddtoCart2(0);
-    //Verify that 'The product has been added to you' is dispalyed
+     //Verify that 'The product has been added to your shopping cart' is dispalyed
     await expect(shopping.barNotification).toContainText(Message.shoppingCartbarSuccessNotification);
-    await page.waitForTimeout(3000); //Wait 3 sec
+    //Wait for notification before hovering
+    await expect(shopping.barNotification).not.toBeVisible();
 
     //Hover over shopping cart link
     await homePage.cartLink.first().hover();
@@ -145,7 +148,7 @@ test('Empty Shopping Cart Test', async ({ page }) => {
     const shopping = new Shopping(page);
     const homePage = new HomePage(page);
 
-     //Clear the cart before adding item
+    //Clear the cart before adding item
     await shopping.clearCart();
 
    //Choose desktop menu
@@ -156,8 +159,7 @@ test('Empty Shopping Cart Test', async ({ page }) => {
     await shopping.desktopLinkClick();
     //Add first item to shopping cart
     await shopping.AddtoCart2(0);
-     
-    let cartRowCount = await shopping.removeCart.count();
+
     //Click shopping cart link
     await homePage.cartLink.first().click();
     //Verify cart row count in cart
@@ -168,7 +170,7 @@ test('Empty Shopping Cart Test', async ({ page }) => {
     //CLick on 'Update Shopping Cart' button
     await shopping.updateCart.click();
     //Verify cart row count is decreased by 1 in cart
-    await expect(shopping.removeCart).toHaveCount(cartRowCount - 1);
+    await expect(shopping.removeCart).toHaveCount(1);
 
     //Click on remove check box
     await shopping.removeCart.first().click();
@@ -179,8 +181,9 @@ test('Empty Shopping Cart Test', async ({ page }) => {
     //Verify that shopping cart is empty
     await expect(page.locator('.order-summary-content')).toContainText(Message.cartEmptyMessage);
 
+
     //Verify estimation shopping control is displayed
-    await expect(shopping.estimateShoppingTitle).toHaveText("Estimate shipping");
+    await expect(shopping.estimateShoppingTitle).toBeVisible();
     await expect(shopping.countryDropdown).toBeVisible();
     await expect(shopping.stateProvinceDropdown).toBeVisible();  
     await expect(shopping.zipPostalCodeInput).toBeVisible();

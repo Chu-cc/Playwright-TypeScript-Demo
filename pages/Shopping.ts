@@ -45,11 +45,11 @@ export class Shopping{
           this.continueShopping = page.getByRole('button',{name: 'Continue shopping'});
           this.removeCart = page.locator('input[name="removefromcart"]');
           this.productTitle = page.locator('div.product-item').locator('h2.product-title');
-          this.estimateShoppingTitle = page.locator('div.estimate-shipping').locator('div.title');
+          this.estimateShoppingTitle = page.locator('div.estimate-shipping').locator('div.title strong');
           this.countryDropdown = page.locator('#CountryId');
           this.stateProvinceDropdown = page.locator('#StateProvinceId');
           this.zipPostalCodeInput = page.locator('#ZipPostalCode');
-          this.estimateShippingButton = page.getByRole('button', {name: 'estimateshipping'})
+          this.estimateShippingButton = page.locator('input[name="estimateshipping"]');
           
     }
 

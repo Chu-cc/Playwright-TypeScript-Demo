@@ -3,7 +3,7 @@ Playwright automation testing for the 'Demo Web Shop' website using TypeScript
 
 ## Prerequisites
 Before running the tests, make sure you have the following installed on your machine:
-- **Node.js** (v16 or higher) - [Download Node.js](https://nodejs.org/)
+- **Node.js** (v20 or higher) - [Download Node.js](https://nodejs.org/)
 - **Visual Studio Code (VS Code)** - [Download VS Code](https://code.visualstudio.com/)
 
 You can check if Node.js is installed by running this command in your terminal:
@@ -30,11 +30,8 @@ Clone the repository to your local machine.
 ### 3. Install Dependencies
 Open the integrated terminal in VS Code and run the following command to install required packages:
 ```bash
-npm init playwright@latest
-Do you want to use TypeScript or JavaScript? TypeScript
-Where to put your end-to-end tests ? tests
-Add a GitHub Actions workflow? (Y/n) ? true
-Install Playwright browsers (can be done manually via 'npx playwright install')? (Y/n) >> true
+npm ci
+npx playwright install chromium
 ```
 ### 5. Run Tests
 You can execute the test suite using the following commands:
@@ -50,7 +47,7 @@ npx playwright test Register.spec.ts
 * **Run with chrome browser:**
 ```bash
 npx playwright test --headed --project chromium
-
+```
 * **View the HTML test report:**
 ```bash
 npx playwright show-report
@@ -67,5 +64,10 @@ npx playwright show-report
 
 * **Customizing Test Data:**
   * If you already have an existing account or want to use specific user credentials, you can easily update them by editing the `VALID_USER` object inside the **`Data/Data.ts`** file.
+
+ ### Price Filter Mapping
+To fulfill the assignment's price filter scenario, the Desktops price filter is tested with the range `$1000.00 - $1200.00`:
+- **Filter Applied:** Selecting the `$1000.00 - $1200.00` range updates the displayed item count from **4 to 1**.
+- **Filter Cleared:** Unchecking/clearing the price range restores the displayed item count back from **1 to 4**.
 
 
